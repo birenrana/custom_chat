@@ -565,4 +565,15 @@ class FlutterChat {
       return null;
     }
   }
+
+  static Future setOnlineStatus({
+    String? status,
+    required String usersCollectionName,
+    required String currentUserId,
+  }) async {
+    await FirebaseFirestore.instance
+        .collection(usersCollectionName)
+        .doc(currentUserId)
+        .update({'status': status});
+  }
 }
