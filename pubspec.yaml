@@ -19,11 +19,14 @@ dev_dependencies:
   firebase_auth: ^4.1.4
   firebase_core: ^2.3.0
   cloud_firestore: ^4.1.0
-  emoji_picker_flutter: ^1.5.1
   image_picker: ^0.8.6
   video_player: ^2.4.8
   uuid: ^3.0.7
   video_thumbnail: ^0.5.3
+  intl: ^0.17.0
+  path_provider:
+  flutter_audio_recorder: ^0.5.5
+  file_picker: ^5.2.4
 
 
 # For information on the generic Dart part of this file, see the
