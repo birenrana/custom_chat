@@ -1,19 +1,20 @@
+// ignore_for_file: depend_on_referenced_packages
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'custom_painter.dart';
+import '../custom_painter.dart';
 import 'package:intl/intl.dart';
 
-class LeftChatBubble extends StatelessWidget {
+class GroupLeftChatBubble extends StatelessWidget {
   final String? message;
   final Color? transFormColor;
   final Color? containerColor;
   final Decoration? decoration;
   final TextStyle? messageStyle;
   final EdgeInsets? padding;
-  final LeftBubbleType? bubbleType;
+  final GroupLeftBubbleType? bubbleType;
   final Map<String?, dynamic> userDetailsMap;
-  final bool isStatusAvailable;
-  const LeftChatBubble(
+  final bool isReadMessage;
+  const GroupLeftChatBubble(
       {Key? key,
       this.message,
       this.transFormColor,
@@ -21,15 +22,15 @@ class LeftChatBubble extends StatelessWidget {
       this.decoration,
       this.messageStyle,
       this.padding,
-      this.bubbleType = LeftBubbleType.type1,
+      this.bubbleType = GroupLeftBubbleType.type1,
       required this.userDetailsMap,
-      this.isStatusAvailable = false})
+      this.isReadMessage = false})
       : super(key: key);
 
   setBubbleType() {
     switch (bubbleType) {
-      case LeftBubbleType.type1:
-        return leftSide(
+      case GroupLeftBubbleType.type1:
+        return groupLeftSide1(
             messageStyle: messageStyle,
             transFormColor: transFormColor,
             containerColor: containerColor,
@@ -37,9 +38,9 @@ class LeftChatBubble extends StatelessWidget {
             padding: padding,
             message: message,
             userMap: userDetailsMap,
-            isStatusAvailable: isStatusAvailable);
-      case LeftBubbleType.type2:
-        return leftSide2(
+            isReadMessage: isReadMessage);
+      case GroupLeftBubbleType.type2:
+        return groupLeftSide2(
             message: message,
             padding: padding,
             decoration: decoration,
@@ -47,9 +48,9 @@ class LeftChatBubble extends StatelessWidget {
             transFormColor: transFormColor,
             messageStyle: messageStyle,
             userMap: userDetailsMap,
-            isStatusAvailable: isStatusAvailable);
+            isReadMessage: isReadMessage);
       default:
-        return leftSide(
+        return groupLeftSide1(
           messageStyle: messageStyle,
           transFormColor: transFormColor,
           containerColor: containerColor,
@@ -57,7 +58,7 @@ class LeftChatBubble extends StatelessWidget {
           padding: padding,
           message: message,
           userMap: userDetailsMap,
-          isStatusAvailable: isStatusAvailable,
+          isReadMessage: isReadMessage,
         );
     }
   }
@@ -68,14 +69,14 @@ class LeftChatBubble extends StatelessWidget {
   }
 }
 
-leftSide(
+groupLeftSide1(
     {Color? transFormColor,
     String? message,
     Color? containerColor,
     Decoration? decoration,
     TextStyle? messageStyle,
     EdgeInsets? padding,
-    bool? isStatusAvailable,
+    bool? isReadMessage,
     Map<String?, dynamic>? userMap}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
@@ -107,16 +108,30 @@ leftSide(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Flexible(
-                    child: isStatusAvailable != false
+                    child: isReadMessage != false
                         ? Padding(
                             padding: const EdgeInsets.only(top: 8, bottom: 5.0),
                             child: Align(
                               alignment: Alignment.centerLeft,
-                              child: Text(
-                                message.toString(),
-                                style: messageStyle ??
-                                    const TextStyle(
-                                        color: Colors.black, fontSize: 16),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    userMap!['sendBy'],
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.lime.shade700,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    message.toString(),
+                                    style: messageStyle ??
+                                        const TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                  ),
+                                ],
                               ),
                             ),
                           )
@@ -125,23 +140,36 @@ leftSide(
                                 const EdgeInsets.only(top: 14, bottom: 14.0),
                             child: Align(
                               alignment: Alignment.centerLeft,
-                              child: Text(
-                                message.toString(),
-                                style: messageStyle ??
-                                    const TextStyle(
-                                        color: Colors.black, fontSize: 16),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    userMap!['sendBy'],
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.lime.shade700,
+                                    ),
+                                  ),
+                                  Text(
+                                    message.toString(),
+                                    style: messageStyle ??
+                                        const TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                  ),
+                                ],
                               ),
                             ),
                           )),
                 //const SizedBox(width: 10),
-                isStatusAvailable != false
+                isReadMessage != false
                     ? Padding(
                         padding: const EdgeInsets.only(bottom: 3.0),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            userMap!['time'] != null
+                            userMap['time'] != null
                                 ? Text(
                                     DateFormat('h:mm:a')
                                         .format(userMap['time'].toDate()),
@@ -163,14 +191,14 @@ leftSide(
   );
 }
 
-leftSide2(
+groupLeftSide2(
     {Color? transFormColor,
     String? message,
     Color? containerColor,
     Decoration? decoration,
     TextStyle? messageStyle,
     EdgeInsets? padding,
-    bool? isStatusAvailable,
+    bool? isReadMessage,
     Map<String?, dynamic>? userMap}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
@@ -202,16 +230,30 @@ leftSide2(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Flexible(
-                    child: isStatusAvailable != false
+                    child: isReadMessage != false
                         ? Padding(
                             padding: const EdgeInsets.only(top: 8, bottom: 5.0),
                             child: Align(
                               alignment: Alignment.centerLeft,
-                              child: Text(
-                                message.toString(),
-                                style: messageStyle ??
-                                    const TextStyle(
-                                        color: Colors.black, fontSize: 16),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    userMap!['sendBy'],
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.lime.shade700,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    message.toString(),
+                                    style: messageStyle ??
+                                        const TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                  ),
+                                ],
                               ),
                             ),
                           )
@@ -220,23 +262,36 @@ leftSide2(
                                 const EdgeInsets.only(top: 14, bottom: 14.0),
                             child: Align(
                               alignment: Alignment.centerLeft,
-                              child: Text(
-                                message.toString(),
-                                style: messageStyle ??
-                                    const TextStyle(
-                                        color: Colors.black, fontSize: 16),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    userMap!['sendBy'],
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.lime.shade700,
+                                    ),
+                                  ),
+                                  Text(
+                                    message.toString(),
+                                    style: messageStyle ??
+                                        const TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                  ),
+                                ],
                               ),
                             ),
                           )),
                 //const SizedBox(width: 10),
-                isStatusAvailable != false
+                isReadMessage != false
                     ? Padding(
                         padding: const EdgeInsets.only(bottom: 3.0),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            userMap!['time'] != null
+                            userMap['time'] != null
                                 ? Text(
                                     DateFormat('h:mm:a')
                                         .format(userMap['time'].toDate()),
@@ -258,4 +313,4 @@ leftSide2(
   );
 }
 
-enum LeftBubbleType { type1, type2 }
+enum GroupLeftBubbleType { type1, type2 }

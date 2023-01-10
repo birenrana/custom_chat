@@ -1,35 +1,36 @@
+// ignore_for_file: depend_on_referenced_packages
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
-import 'custom_painter.dart';
+import '../custom_painter.dart';
 import 'package:intl/intl.dart';
 
-class GroupLeftChatBubble extends StatelessWidget {
+class RightChatBubble extends StatelessWidget {
   final String? message;
   final Color? transFormColor;
   final Color? containerColor;
   final Decoration? decoration;
   final TextStyle? messageStyle;
   final EdgeInsets? padding;
-  final GroupLeftBubbleType? bubbleType;
+  final BubbleType? bubbleType;
   final Map<String?, dynamic> userDetailsMap;
-  final bool isStatusAvailable;
-  const GroupLeftChatBubble(
-      {Key? key,
-      this.message,
-      this.transFormColor,
-      this.containerColor,
-      this.decoration,
-      this.messageStyle,
-      this.padding,
-      this.bubbleType = GroupLeftBubbleType.type1,
-      required this.userDetailsMap,
-      this.isStatusAvailable = false})
-      : super(key: key);
+  final bool isReadMessage;
+
+  const RightChatBubble({
+    Key? key,
+    this.message,
+    this.transFormColor,
+    this.containerColor,
+    this.decoration,
+    this.messageStyle,
+    this.padding,
+    this.isReadMessage = false,
+    this.bubbleType = BubbleType.type1,
+    required this.userDetailsMap,
+  }) : super(key: key);
 
   setBubbleType() {
     switch (bubbleType) {
-      case GroupLeftBubbleType.type1:
-        return groupLeftSide1(
+      case BubbleType.type1:
+        return upSide(
             messageStyle: messageStyle,
             transFormColor: transFormColor,
             containerColor: containerColor,
@@ -37,9 +38,9 @@ class GroupLeftChatBubble extends StatelessWidget {
             padding: padding,
             message: message,
             userMap: userDetailsMap,
-            isStatusAvailable: isStatusAvailable);
-      case GroupLeftBubbleType.type2:
-        return groupLeftSide2(
+            isReadMessage: isReadMessage);
+      case BubbleType.type2:
+        return bottomSide(
             message: message,
             padding: padding,
             decoration: decoration,
@@ -47,9 +48,9 @@ class GroupLeftChatBubble extends StatelessWidget {
             transFormColor: transFormColor,
             messageStyle: messageStyle,
             userMap: userDetailsMap,
-            isStatusAvailable: isStatusAvailable);
+            isReadMessage: isReadMessage);
       default:
-        return groupLeftSide1(
+        return upSide(
           messageStyle: messageStyle,
           transFormColor: transFormColor,
           containerColor: containerColor,
@@ -57,7 +58,7 @@ class GroupLeftChatBubble extends StatelessWidget {
           padding: padding,
           message: message,
           userMap: userDetailsMap,
-          isStatusAvailable: isStatusAvailable,
+          isReadMessage: isReadMessage,
         );
     }
   }
@@ -68,35 +69,32 @@ class GroupLeftChatBubble extends StatelessWidget {
   }
 }
 
-groupLeftSide1(
+upSide(
     {Color? transFormColor,
     String? message,
     Color? containerColor,
     Decoration? decoration,
     TextStyle? messageStyle,
     EdgeInsets? padding,
-    bool? isStatusAvailable,
+    bool? isReadMessage,
     Map<String?, dynamic>? userMap}) {
   return Row(
-    mainAxisAlignment: MainAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.end,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Transform(
-        alignment: Alignment.center,
-        transform: Matrix4.rotationY(math.pi),
-        child: CustomPaint(
-          painter: CustomShape(transFormColor ?? Colors.white),
-        ),
-      ),
       Flexible(
         child: Container(
+          padding: padding ??
+              const EdgeInsets.only(
+                  /*top: 14, bottom: 14.0,*/
+                  right: 10.0,
+                  left: 14.0),
           constraints: const BoxConstraints(maxWidth: 300),
-          padding: padding ?? const EdgeInsets.only(right: 10.0, left: 14.0),
           decoration: decoration ??
               BoxDecoration(
-                color: containerColor ?? Colors.white,
+                color: containerColor ?? Colors.greenAccent.shade100,
                 borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(18),
+                  topLeft: Radius.circular(18),
                   bottomLeft: Radius.circular(18),
                   bottomRight: Radius.circular(18),
                 ),
@@ -107,30 +105,16 @@ groupLeftSide1(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Flexible(
-                    child: isStatusAvailable != false
+                    child: isReadMessage != false
                         ? Padding(
                             padding: const EdgeInsets.only(top: 8, bottom: 5.0),
                             child: Align(
                               alignment: Alignment.centerLeft,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    userMap!['sendBy'],
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.lime.shade700,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    message.toString(),
-                                    style: messageStyle ??
-                                        const TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                  ),
-                                ],
+                              child: Text(
+                                message.toString(),
+                                style: messageStyle ??
+                                    const TextStyle(
+                                        color: Colors.black, fontSize: 16),
                               ),
                             ),
                           )
@@ -139,36 +123,23 @@ groupLeftSide1(
                                 const EdgeInsets.only(top: 14, bottom: 14.0),
                             child: Align(
                               alignment: Alignment.centerLeft,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    userMap!['sendBy'],
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.lime.shade700,
-                                    ),
-                                  ),
-                                  Text(
-                                    message.toString(),
-                                    style: messageStyle ??
-                                        const TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                  ),
-                                ],
+                              child: Text(
+                                message.toString(),
+                                style: messageStyle ??
+                                    const TextStyle(
+                                        color: Colors.black, fontSize: 16),
                               ),
                             ),
                           )),
                 //const SizedBox(width: 10),
-                isStatusAvailable != false
+                isReadMessage != false
                     ? Padding(
                         padding: const EdgeInsets.only(bottom: 3.0),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            userMap['time'] != null
+                            userMap!['time'] != null
                                 ? Text(
                                     DateFormat('h:mm:a')
                                         .format(userMap['time'].toDate()),
@@ -177,6 +148,20 @@ groupLeftSide1(
                                       fontSize: 12,
                                     ))
                                 : Container(),
+                            const SizedBox(
+                              width: 3,
+                            ),
+                            userMap['seen']
+                                ? const Icon(
+                                    Icons.done_all,
+                                    color: Colors.blue,
+                                    size: 16,
+                                  )
+                                : const Icon(
+                                    Icons.done,
+                                    color: Colors.grey,
+                                    size: 16,
+                                  )
                           ],
                         ),
                       )
@@ -186,41 +171,38 @@ groupLeftSide1(
           ),
         ),
       ),
+      CustomPaint(
+          painter: CustomShape(transFormColor ?? Colors.greenAccent.shade100)),
     ],
   );
 }
 
-groupLeftSide2(
+bottomSide(
     {Color? transFormColor,
     String? message,
     Color? containerColor,
     Decoration? decoration,
     TextStyle? messageStyle,
     EdgeInsets? padding,
-    bool? isStatusAvailable,
+    bool? isReadMessage,
     Map<String?, dynamic>? userMap}) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.end,
+    crossAxisAlignment: CrossAxisAlignment.end,
     children: [
-      Transform(
-        alignment: Alignment.center,
-        transform: Matrix4.rotationY(math.pi),
-        child: CustomPaint(
-          painter: CustomLeftReverseShape(transFormColor ?? Colors.white),
-        ),
-      ),
       Flexible(
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 300),
           padding: padding ?? const EdgeInsets.only(right: 10.0, left: 14.0),
+          constraints: const BoxConstraints(maxWidth: 300),
           decoration: decoration ??
               BoxDecoration(
-                color: containerColor ?? Colors.white,
+                color: containerColor ?? Colors.greenAccent.shade100,
                 borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(18),
                   topRight: Radius.circular(18),
                   bottomLeft: Radius.circular(18),
-                  bottomRight: Radius.circular(18),
+                  // bottomRight: Radius.circular(18),
                 ),
               ),
           child: IntrinsicWidth(
@@ -229,30 +211,16 @@ groupLeftSide2(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Flexible(
-                    child: isStatusAvailable != false
+                    child: isReadMessage != false
                         ? Padding(
                             padding: const EdgeInsets.only(top: 8, bottom: 5.0),
                             child: Align(
                               alignment: Alignment.centerLeft,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    userMap!['sendBy'],
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.lime.shade700,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    message.toString(),
-                                    style: messageStyle ??
-                                        const TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                  ),
-                                ],
+                              child: Text(
+                                message.toString(),
+                                style: messageStyle ??
+                                    const TextStyle(
+                                        color: Colors.black, fontSize: 16),
                               ),
                             ),
                           )
@@ -261,36 +229,23 @@ groupLeftSide2(
                                 const EdgeInsets.only(top: 14, bottom: 14.0),
                             child: Align(
                               alignment: Alignment.centerLeft,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    userMap!['sendBy'],
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.lime.shade700,
-                                    ),
-                                  ),
-                                  Text(
-                                    message.toString(),
-                                    style: messageStyle ??
-                                        const TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                  ),
-                                ],
+                              child: Text(
+                                message.toString(),
+                                style: messageStyle ??
+                                    const TextStyle(
+                                        color: Colors.black, fontSize: 16),
                               ),
                             ),
                           )),
                 //const SizedBox(width: 10),
-                isStatusAvailable != false
+                isReadMessage != false
                     ? Padding(
                         padding: const EdgeInsets.only(bottom: 3.0),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            userMap['time'] != null
+                            userMap!['time'] != null
                                 ? Text(
                                     DateFormat('h:mm:a')
                                         .format(userMap['time'].toDate()),
@@ -299,6 +254,20 @@ groupLeftSide2(
                                       fontSize: 12,
                                     ))
                                 : Container(),
+                            const SizedBox(
+                              width: 3,
+                            ),
+                            userMap['seen']
+                                ? const Icon(
+                                    Icons.done_all,
+                                    color: Colors.blue,
+                                    size: 16,
+                                  )
+                                : const Icon(
+                                    Icons.done,
+                                    color: Colors.grey,
+                                    size: 16,
+                                  )
                           ],
                         ),
                       )
@@ -308,8 +277,11 @@ groupLeftSide2(
           ),
         ),
       ),
+      CustomPaint(
+          painter: CustomReverseShape(
+              transFormColor ?? Colors.greenAccent.shade100)),
     ],
   );
 }
 
-enum GroupLeftBubbleType { type1, type2 }
+enum BubbleType { type1, type2 }

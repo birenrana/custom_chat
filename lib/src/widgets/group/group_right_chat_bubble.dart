@@ -1,5 +1,6 @@
+// ignore_for_file: depend_on_referenced_packages
 import 'package:flutter/material.dart';
-import 'custom_painter.dart';
+import '../custom_painter.dart';
 import 'package:intl/intl.dart';
 
 class GroupRightChatBubble extends StatelessWidget {
@@ -11,7 +12,7 @@ class GroupRightChatBubble extends StatelessWidget {
   final EdgeInsets? padding;
   final GroupRightBubbleType? bubbleType;
   final Map<String?, dynamic> userDetailsMap;
-  final bool isStatusAvailable;
+  final bool isReadMessage;
   final String? uid;
   final String? messageId;
 
@@ -23,7 +24,7 @@ class GroupRightChatBubble extends StatelessWidget {
     this.decoration,
     this.messageStyle,
     this.padding,
-    this.isStatusAvailable = false,
+    this.isReadMessage = false,
     this.bubbleType = GroupRightBubbleType.type1,
     required this.userDetailsMap,
     this.uid,
@@ -41,7 +42,7 @@ class GroupRightChatBubble extends StatelessWidget {
             padding: padding,
             message: message,
             userMap: userDetailsMap,
-            isStatusAvailable: isStatusAvailable,
+            isReadMessage: isReadMessage,
             uid: uid,
             messageId: messageId);
       case GroupRightBubbleType.type2:
@@ -53,7 +54,7 @@ class GroupRightChatBubble extends StatelessWidget {
             transFormColor: transFormColor,
             messageStyle: messageStyle,
             userMap: userDetailsMap,
-            isStatusAvailable: isStatusAvailable,
+            isReadMessage: isReadMessage,
             uid: uid,
             messageId: messageId);
       default:
@@ -65,7 +66,7 @@ class GroupRightChatBubble extends StatelessWidget {
             padding: padding,
             message: message,
             userMap: userDetailsMap,
-            isStatusAvailable: isStatusAvailable,
+            isReadMessage: isReadMessage,
             uid: uid,
             messageId: messageId);
     }
@@ -86,7 +87,7 @@ side1(
     Decoration? decoration,
     TextStyle? messageStyle,
     EdgeInsets? padding,
-    bool? isStatusAvailable,
+    bool? isReadMessage,
     Map<String?, dynamic>? userMap}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.end,
@@ -109,62 +110,13 @@ side1(
                   bottomRight: Radius.circular(18),
                 ),
               ),
-          // child: Padding(
-          //   padding: const EdgeInsets.only(top: 14, bottom: 14.0),
-          //   child: RichText(
-          //     text: TextSpan(
-          //       text: message,
-          //       style: const TextStyle(
-          //         color: Colors.black,
-          //         fontSize: 18,
-          //       ),
-          //       children: <WidgetSpan>[
-          //         WidgetSpan(
-          //           child: Row(
-          //             mainAxisSize: MainAxisSize.min,
-          //             crossAxisAlignment: CrossAxisAlignment.end,
-          //             mainAxisAlignment: MainAxisAlignment.end,
-          //             children: [
-          //               Align(
-          //                 child: userMap!['time'] != null
-          //                     ? Text(
-          //                         DateFormat('h:mm:a')
-          //                             .format(userMap['time'].toDate()),
-          //                         textAlign: TextAlign.start,
-          //                         style: TextStyle(
-          //                           color: Colors.black.withOpacity(.30),
-          //                           fontSize: 12,
-          //                         ))
-          //                     : Container(),
-          //               ),
-          //               const SizedBox(
-          //                 width: 3,
-          //               ),
-          //               userMap['seen']
-          //                   ? const Icon(
-          //                       Icons.done_all,
-          //                       color: Colors.blue,
-          //                       size: 16,
-          //                     )
-          //                   : const Icon(
-          //                       Icons.done,
-          //                       color: Colors.grey,
-          //                       size: 16,
-          //                     )
-          //             ],
-          //           ),
-          //         )
-          //       ],
-          //     ),
-          //   ),
-          // )
           child: IntrinsicWidth(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Flexible(
-                    child: isStatusAvailable != false
+                    child: isReadMessage != false
                         ? Padding(
                             padding: const EdgeInsets.only(top: 8, bottom: 5.0),
                             child: Align(
@@ -222,7 +174,7 @@ side1(
                             ),
                           )),
                 //const SizedBox(width: 10),
-                isStatusAvailable != false
+                isReadMessage != false
                     ? Padding(
                         padding: const EdgeInsets.only(bottom: 3.0),
                         child: Row(
@@ -276,7 +228,7 @@ side2(
     Decoration? decoration,
     TextStyle? messageStyle,
     EdgeInsets? padding,
-    bool? isStatusAvailable,
+    bool? isReadMessage,
     Map<String?, dynamic>? userMap}) {
   return Column(
     mainAxisSize: MainAxisSize.min,
@@ -303,7 +255,7 @@ side2(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Flexible(
-                    child: isStatusAvailable != false
+                    child: isReadMessage != false
                         ? Padding(
                             padding: const EdgeInsets.only(top: 8, bottom: 5.0),
                             child: Align(
@@ -361,7 +313,7 @@ side2(
                             ),
                           )),
                 //const SizedBox(width: 10),
-                isStatusAvailable != false
+                isReadMessage != false
                     ? Padding(
                         padding: const EdgeInsets.only(bottom: 3.0),
                         child: Row(
@@ -401,7 +353,9 @@ side2(
         ),
       ),
       CustomPaint(
-          painter: CustomReverseShape(transFormColor ?? Colors.greenAccent.shade100,)),
+          painter: CustomReverseShape(
+        transFormColor ?? Colors.greenAccent.shade100,
+      )),
     ],
   );
 }
